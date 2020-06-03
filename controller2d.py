@@ -10,7 +10,7 @@ import math
 
 
 class Controller2D(object):
-    def __init__(self, waypoints, control_method):
+    def __init__(self, waypoints):
         self.vars = cutils.CUtils()
         self._current_x = 0
         self._current_y = 0
@@ -33,16 +33,17 @@ class Controller2D(object):
         self._Kvf = 2.5
         self._wheelbase = 3.0
         self._eps_lookahead = 10e-3
-        self.control_method = control_method
+        self._closest_distance = 0
         self._steering_diff = np.linspace(-10, 10, 21, endpoint=True)
 
-    def update_values(self, x, y, yaw, speed, timestamp, frame):
+    def update_values(self, x, y, yaw, speed, timestamp, frame, closest_distance):
         self._current_x = x
         self._current_y = y
         self._current_yaw = yaw
         self._current_speed = speed
         self._current_timestamp = timestamp
         self._current_frame = frame
+        self._closest_distance = closest_distance
         if self._current_frame:
             self._start_control_loop = True
 
@@ -271,4 +272,3 @@ class Controller2D(object):
         """
         self.vars.v_previous = v  # Store forward speed to be used in next step
         self.vars.t_previous = t
-
